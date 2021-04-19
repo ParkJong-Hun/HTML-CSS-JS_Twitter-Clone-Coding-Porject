@@ -7,7 +7,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
   return (
     <>
-      <AppRouter isLoggiedIn={isLoggedIn}/>;
+      <AppRouter isLoggiedIn={isLoggedIn}/>
       <footer>&copy; Pwitter {new Date().getFullYear()}</footer>
     </>
   );
