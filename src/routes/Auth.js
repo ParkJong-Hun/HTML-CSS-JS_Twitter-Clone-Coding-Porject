@@ -4,7 +4,8 @@ import React, { useState } from "react";
 const Auth = () => {
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
-    const [newAccount, setNewAccout] = useState(true);
+    const [newAccount, setNewAccount] = useState(true);
+    const [error, setError] = useState("");
     const onChange = (event) => {
         const {target/*변경이 일어나는 부분*/: {name, value}} = event;//변화가 일어나는것 = 이벤트
         if(name === "email") {
@@ -18,15 +19,19 @@ const Auth = () => {
         try {
             let data;
             if(newAccount) {//new Account
-                /*await = 해당 메서드를 비동기로 처리*/data = await authService.createUserWithEmailAndPassword(email, password);
+                /*await = 해당 메서드를 비동기로 처리*/data = await authService.createUserWithEmailAndPassword(
+                    email, 
+                    password
+                );
             } else {//log in
                 data = await authService.signInWithEmailAndPassword(email, password);
             }
             console.log(data);
         } catch (error) {
-            console.log(error);
+            setError(error.message);
         }
     };//Submit을 할 때 새로고침이 되어 리액트가 초기화되는것을 방지. preventDefault = 기본 행위 실행을 원치 않음을 의미.
+    const toggleAccount = () => setNewAccount((prev) => !prev);
     return (
         <div>
             <form onSubmit={onSubmit}>
@@ -41,13 +46,15 @@ const Auth = () => {
                 <input 
                     name="password" 
                     type="password" 
-                    plcaeholder="password" 
+                    plcaeholder="Password" 
                     required 
                     value={password}
                     onChange={onChange}
                 />
-                <input type="submit" value={newAccount ? "Create Account" : "Log In"}/*newAccount가 ture이면 Create Account false이면 Log In 버튼 */ />
+                <input type="submit" value={newAccount ? "Create Account" : "Sign In"}/*newAccount가 ture이면 Create Account false이면 Log In 버튼 */ />
+                {error}
             </form>
+            <span onClick={toggleAccount}>{newAccount ? "Sign in" : "Create Account"}</span>
             <div>
                 <button>Continue with Google</button>
                 <button>Continue with Github</button>
