@@ -51,7 +51,7 @@ const Auth = () => {
                 <input 
                     name="email" 
                     type="email" 
-                    plcaeholder="Email" 
+                    placeholder="Email" 
                     required 
                     value={email}//직접 값을 지정하면 평생 값이 바꾸지 않음. 그러므로 state로 저장해서 바뀔때마다 갱신해야됨.
                     onChange={onChange}
@@ -59,7 +59,7 @@ const Auth = () => {
                 <input 
                     name="password" 
                     type="password" 
-                    plcaeholder="Password" 
+                    placeholder="Password" 
                     required 
                     value={password}
                     onChange={onChange}
