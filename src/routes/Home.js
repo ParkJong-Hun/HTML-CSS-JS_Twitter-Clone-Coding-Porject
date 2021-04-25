@@ -1,5 +1,6 @@
 import { dbService } from "fbase";
 import React, { useEffect, useState } from "react";
+import Pweet from "../components/Pweet";
 
 const Home = ({userObj}) => {
     const[pweet, setPweet] = useState("");
@@ -31,9 +32,7 @@ const Home = ({userObj}) => {
             </form>
             <div>
                 {pweets.map((pweet) => (
-                    <div key={pweet.id}>
-                        <h4>{pweet.text}</h4>
-                    </div>
+                    <Pweet key={pweet.id} pweetObj={pweet} isOwner={pweet.creatorId === userObj.uid}/>
                 ))}
             </div>
         </div>
