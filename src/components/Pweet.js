@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 const Pweet = ({ pweetObj, isOwner }) => {
     const [editing, setEditing] = useState(false);//true, false 바꾸기 위해.(edit 중인가 아닌가)
-    const [newPweet, setNewPweet] = useState(pweetObj.text);(input의 text를 update하기 위해)
+    const [newPweet, setNewPweet] = useState(pweetObj.text);
     const onDeleteClick = async () => {
         const ok = window.confirm("Are you sure you want to delete this pweet?");
         if(ok) {
@@ -16,7 +16,8 @@ const Pweet = ({ pweetObj, isOwner }) => {
         event.preventDefault();
         await dbService.doc('pweets/' + pweetObj.id).update({
             text: newPweet,
-        });setEditing(false);
+        });
+        setEditing(false);
     }
     const onChange = (event) => {
         const {target:{value},} = event;
