@@ -1,6 +1,7 @@
-import { dbService } from "fbase";
+import { dbService, storageService } from "fbase";
 import React, { useEffect, useState } from "react";
 import Pweet from "../components/Pweet";
+import { v4 as uuidv4 } from "uuid";
 
 const Home = ({userObj}) => {
     const[pweet, setPweet] = useState("");
@@ -14,12 +15,21 @@ const Home = ({userObj}) => {
     }, []);
     const onSubmit =async (event) => {
         event.preventDefault();
-        await dbService.collection("pweets").add({
+        let attachmentUrl = "";
+        if(attachment != "") {
+            const attachmentRef = storageService.ref().child(userObj.uid + "/" + uuidv4());
+            const response = await attachmentRef.putString(attachment, "data_url");
+            attachmentUrl = await response.ref.getDownloadURL();
+        }
+        const pweetObj = {
             text:pweet,
             createdAt: Date.now(),
-            creatorId: userObj.uid
-        });
+            creatorId: userObj.uid,
+            attachmentUrl
+        }
+        await dbService.collection("pweets").add(pweetObj);
         setPweet("");
+        setAttachment("");
     }
     const onChange = (event) => {
         const {target:{value},} = event;

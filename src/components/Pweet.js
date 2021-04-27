@@ -43,6 +43,9 @@ const Pweet = ({ pweetObj, isOwner }) => {
             ) : (
                 <>
                 <h4>{pweetObj.text}</h4>
+                {pweetObj.attachmentUrl && 
+                (<img src={pweetObj.attachmentUrl} width="50px" height="50px"/>
+                )}
                 {isOwner && (
                     <>
                         <button onClick={onDeleteClick}>Delete Pweet</button>
