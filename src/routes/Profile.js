@@ -1,25 +1,35 @@
-import { authService, dbService } from "fbase";
-import React, { useEffect } from "react";
-import { useHistory } from "react-router";
+import { authService } from "fbase";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
-export default ({ userObj }) => {
+export default ({ refreshUser, userObj }) => {
     const history = useHistory();
+    const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
     const onLogOutClick = () => {
         authService.signOut();
+        authService.currentUser.uid();
         history.push("/");
     }
-    const getMyPweets = async() => {
-        const pweets = await dbService
-        .collection("pweets")
-        .where("creatorId", "==", userObj.uid)
-        .orderBy("createAt")
-        .get();
-        console.log(pweets.docs.map((doc) => doc.data()));
+    const onChange = (event) => {
+        const {
+          target: { value },
+        } = event;
+        setNewDisplayName(value);
+      }
+    const onSubmit = async (event) => {
+        event.preventDefault();
+        if(userObj.displayName !== newDisplayName) {
+            await userObj.updateProfile({
+                displayName: newDisplayName
+            });
+            refreshUser();
+        }
     }
-    useEffect(() => {
-        getMyPweets();
-    }, [])
 return <>
+    <form onSubmit={onSubmit}>
+        <input type="text" placeholder="Display name" value={newDisplayName}/>
+        <input type="submit" value="Update Profile" />
+    </form>
     <button onClick = {onLogOutClick}>Log Out</button>
     </>;
 }
